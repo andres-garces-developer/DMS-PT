@@ -17,6 +17,16 @@ builder.Services.AddDbContext<PruebaTecnicaDMSSoftContext>(
         otp.UseSqlServer(builder.Configuration.GetConnectionString("DefaulfConnectDB"));
     });
 
+// Configure CORS in this project
+var rulesCorsAPI = "RulesCorsAPISetting";
+builder.Services.AddCors(otp =>
+{
+    otp.AddPolicy(name: rulesCorsAPI, builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +35,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(rulesCorsAPI);
 
 app.UseAuthorization();
 
